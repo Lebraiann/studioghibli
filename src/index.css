@@ -201,6 +201,48 @@ button:focus-visible {
   background-color: var(--color-accent-light);
 }
 
+.gatos {
+  padding: 20px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.gatos h1 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.gatos ul {
+  list-style: none;
+  padding: 0;
+}
+
+.gatos li {
+  background-color: #fff;
+  border: 2px solid var(--color-border);
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gatos li p {
+  margin: 5px 0;
+}
+
+.gatos li ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.gatos img {
+  display: block;
+  margin: 0 auto 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

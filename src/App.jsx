@@ -9,6 +9,7 @@ import Lista from './Componentes/lista'
 import Usuario from './Componentes/usuarios'
 import Menu from './Componentes/menu';
 import Ghibli from './Componentes/ghibli';
+import Gatos from './Componentes/gatos';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
   <Route path="/explorar" element={<Explorar />} />
   <Route path="/favoritos" element={<Favoritos />} />
   <Route path="/ghibli/:name" element={<Ghibli />} />
+  <Route path="/gatos" element={<Gatos />} />
 </Routes>
 
 </Router>
