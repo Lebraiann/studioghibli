@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AppProvider } from './contexto/contexto';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
 
@@ -14,6 +15,7 @@ import Gatos from './Componentes/gatos';
 function App() {
 
   return (
+     <AppProvider>
     <Router>
 
 <Menu />
@@ -30,7 +32,7 @@ function App() {
 </Routes>
 
 </Router>
- 
+ </AppProvider>
   )
 }
 

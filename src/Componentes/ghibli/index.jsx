@@ -1,36 +1,60 @@
-import { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom"; 
+import { useState, useEffect, useContext } from 'react';
+import { useParams } from "react-router-dom";
 import './style.css';
+import { AppContext } from '../../contexto/contexto.jsx';
 
 function Ghibli() {
-  const { name } = useParams(); 
-  const [filmData, setFilmData] = useState(null);
+  const { id } = useParams();
+  const [pelicula, setPelicula] = useState(null);
+  const { favoritos, setFavoritos } = useContext(AppContext);
 
   useEffect(() => {
-    fetch(`https://ghibliapi.vercel.app/films/${name}`)
+    fetch(`https://ghibliapi.vercel.app/films/${id}`)
       .then(response => response.json())
-      .then(responseData => setFilmData(responseData))
+      .then(data => setPelicula(data))
       .catch(error => console.error("Error:", error));
-  }, [name]); 
+  }, [id]);
 
-  if (!filmData) return <p>Cargando...</p>;
+  const esFavorito = favoritos.some(fav => fav.id === pelicula?.id);
+
+  const toggleFavorito = () => {
+    if (!pelicula) return;
+    if (esFavorito) {
+      setFavoritos(favoritos.filter(fav => fav.id !== pelicula.id));
+    } else {
+      setFavoritos([
+        ...favoritos,
+        {
+          id: pelicula.id,
+          title: pelicula.title,
+          image: pelicula.image
+        }
+      ]);
+    }
+  };
+
+  if (!pelicula) return <p>Cargando...</p>;
 
   return (
     <div className="film-details">
-      <img 
-        src={filmData.image || 'https://via.placeholder.com/300'} 
-        alt={filmData.title} 
-        width="300"
+      <img
+        src={pelicula.image}
+        alt={pelicula.title}
+        width="250"
+        style={{ borderRadius: '10px' }}
       />
-      <h1>{filmData.title}</h1>
-      <p><strong>Director:</strong> {filmData.director}</p>
-      <p><strong>Productor:</strong> {filmData.producer}</p>
-      <p><strong>Fecha de lanzamiento:</strong> {filmData.release_date}</p>
-      <p><strong>Duración:</strong> {filmData.running_time} minutos</p>
-      <p><strong>Descripción:</strong> {filmData.description}</p>
-      <p><strong>Puntuación RT:</strong> {filmData.rt_score}</p>
+      <h1>{pelicula.title}</h1>
+      <p><strong>Director:</strong> {pelicula.director}</p>
+      <p><strong>Productor:</strong> {pelicula.producer}</p>
+      <p><strong>Año:</strong> {pelicula.release_date}</p>
+      <p><strong>Descripción:</strong> {pelicula.description}</p>
+      <button onClick={toggleFavorito} style={{ fontSize: '2em', marginTop: '10px' }}>
+        {esFavorito ? '❤️ Quitar de favoritos' : '🤍 Agregar a favoritos'}
+      </button>
     </div>
   );
 }
 
 export default Ghibli;
+
+<Route path="/ghibli/:name" element={<Ghibli />} />
