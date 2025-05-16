@@ -57,4 +57,3 @@ function Ghibli() {
 
 export default Ghibli;
 
-<Route path="/ghibli/:name" element={<Ghibli />} />

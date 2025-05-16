@@ -1,72 +1,51 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
-import Filtro from '../filtro';
-import './style.css';
+import { useContext, useState } from 'react';
+import { AppContext } from '../../contexto/contexto';
+import './style.css'; 
 
-function Lista() {
-  const navigate = useNavigate();
-  const [data, setData] = useState([]);
-  const [busqueda, setBusqueda] = useState('');
-  const [filtro, setFiltro] = useState('Todos'); // Estado para el filtro seleccionado
 
-  useEffect(() => {
-    const obtenerDatos = async () => {
-      try {
-        const res = await fetch('https://ghibliapi.vercel.app/films/');
-        const json = await res.json();
-        setData(json);
-      } catch (error) {
-        console.error('Error al obtener los datos:', error);
-      }
-    };
+function Lista({ filtroBusqueda }) {
+  const { peliculas, favoritos, setFavoritos } = useContext(AppContext);
+  const [hovered, setHovered] = useState(null);
 
-    obtenerDatos();
-  }, []);
+  // Filtrado por búsqueda
+  const filtradas = peliculas.filter(p =>
+    p.title.toLowerCase().includes(filtroBusqueda.toLowerCase())
+  );
 
-  let resultados = data;
-
-  // Filtrar por búsqueda
-  if (busqueda.length >= 2) {
-    resultados = resultados.filter(film =>
-      film.title.toLowerCase().includes(busqueda.toLowerCase())
-    );
-  }
-
-  // Filtrar por director
-  if (filtro !== 'Todos') {
-    resultados = resultados.filter(film => film.director === filtro);
-  }
+  const toggleFavorito = (pelicula) => {
+    if (favoritos.some(fav => fav.id === pelicula.id)) {
+      setFavoritos(favoritos.filter(fav => fav.id !== pelicula.id));
+    } else {
+      setFavoritos([...favoritos, { id: pelicula.id, title: pelicula.title, image: pelicula.image }]);
+    }
+  };
 
   return (
-    <>
-      <input
-        type="text"
-        placeholder="Buscar película"
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        className="c-buscador"
-      />
-      <Filtro onFiltroChange={setFiltro} /> {/* Componente Filtro */}
-      <section className='c-lista'>
-        {resultados.map((film) => (
-          <div
-            className='c-lista-film'
-            onClick={() => navigate(`/ghibli/${film.id}`)}
-            key={film.id}
-          >
-            <img
-              src={film.image || 'https://via.placeholder.com/150'}
-              alt={`Película ${film.title}`}
-              width='auto'
-              height='150'
-              loading='lazy'
-            />
-            <p><strong>{film.title}</strong></p>
-            <p>{film.description.substring(0, 100)}...</p>
+    <div className="c-lista">
+      {filtradas.map(p => (
+        <div
+          className="c-lista-film"
+          key={p.id}
+          onMouseEnter={() => setHovered(p.id)}
+          onMouseLeave={() => setHovered(null)}
+        >
+          <img src={p.image} alt={p.title} height="220" />
+          <div className="film-info">
+            <span className="film-title">{p.title}</span>
+            <span className="film-year">{p.release_date}</span>
+            <button className="fav-btn" onClick={() => toggleFavorito(p)}>
+              {favoritos.some(fav => fav.id === p.id) ? '❤️' : '🤍'}
+            </button>
           </div>
-        ))}
-      </section>
-    </>
+          {hovered === p.id && (
+            <div className="film-sinopsis">
+              <strong>Sinopsis:</strong>
+              <p>{p.description}</p>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
 
