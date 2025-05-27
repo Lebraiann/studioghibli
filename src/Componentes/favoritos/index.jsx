@@ -15,7 +15,7 @@ function Favoritos() {
           {favoritos.map((pelicula, index) => (
             <div
               className='c-lista-film'
-              onClick={() => navigate(`/pelicula/${pelicula.id}`)}
+              onClick={() => navigate(`/ghibli/${pelicula.id}`)}
               key={pelicula.id || index}
               style={{ cursor: 'pointer' }}
             >

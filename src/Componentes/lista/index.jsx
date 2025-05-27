@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
 import { AppContext } from '../../contexto/contexto';
+import { Link } from 'react-router-dom'; // <-- Importa Link
 import './style.css'; 
 
-
-function Lista({ filtroBusqueda }) {
+function Lista({ filtroBusqueda = "" }) {
   const { peliculas, favoritos, setFavoritos } = useContext(AppContext);
   const [hovered, setHovered] = useState(null);
 
@@ -22,29 +22,42 @@ function Lista({ filtroBusqueda }) {
 
   return (
     <div className="c-lista">
-      {filtradas.map(p => (
-        <div
-          className="c-lista-film"
-          key={p.id}
-          onMouseEnter={() => setHovered(p.id)}
-          onMouseLeave={() => setHovered(null)}
-        >
-          <img src={p.image} alt={p.title} height="220" />
-          <div className="film-info">
-            <span className="film-title">{p.title}</span>
-            <span className="film-year">{p.release_date}</span>
-            <button className="fav-btn" onClick={() => toggleFavorito(p)}>
-              {favoritos.some(fav => fav.id === p.id) ? '❤️' : '🤍'}
-            </button>
-          </div>
-          {hovered === p.id && (
-            <div className="film-sinopsis">
-              <strong>Sinopsis:</strong>
-              <p>{p.description}</p>
+      {filtradas
+        .filter(p => p && p.title && p.image)
+        .map(p => (
+          <Link
+            to={`/ghibli/${p.id}`}
+            key={p.id}
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            <div
+              className="c-lista-film"
+              onMouseEnter={() => setHovered(p.id)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <img src={p.image} alt={p.title} height="220" />
+              <div className="film-info">
+                <span className="film-title">{p.title}</span>
+                <span className="film-year">{p.release_date}</span>
+                <button
+                  className="fav-btn"
+                  onClick={e => {
+                    e.preventDefault(); // Para que no navegue al hacer clic en el corazón
+                    toggleFavorito(p);
+                  }}
+                >
+                  {favoritos.some(fav => fav.id === p.id) ? '❤️' : '🤍'}
+                </button>
+              </div>
+              {hovered === p.id && (
+                <div className="film-sinopsis">
+                  <strong>Sinopsis:</strong>
+                  <p>{p.description}</p>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      ))}
+          </Link>
+        ))}
     </div>
   );
 }
