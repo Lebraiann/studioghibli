@@ -352,3 +352,64 @@ button:focus-visible {
 .btn-limpiar:hover, .btn-modo-oscuro:hover {
   background: #a3c4bc;
 }
+.trivia-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.pregunta {
+  font-size: 1.5rem;
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.opciones {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.opcion-btn {
+  padding: 15px;
+  font-size: 1.1rem;
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.opcion-btn:hover {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.puntaje {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.juego-terminado {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.juego-terminado button {
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.juego-terminado button:hover {
+  background-color: #357abd;
+}
